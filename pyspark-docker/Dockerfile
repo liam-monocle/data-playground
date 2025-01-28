@@ -1,6 +1,6 @@
-FROM python:3.10-bullseye as spark-base
+FROM python:3.10-bullseye AS spark-base
 
-ARG SPARK_VERSION=3.5.1
+ARG SPARK_VERSION=3.5.4
 
 # Install tools required by the OS
 RUN apt-get update && \
@@ -29,7 +29,7 @@ RUN curl https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VER
  && tar xvzf spark-${SPARK_VERSION}-bin-hadoop3.tgz --directory /opt/spark --strip-components 1 \
  && rm -rf spark-${SPARK_VERSION}-bin-hadoop3.tgz
 
-FROM spark-base as pyspark
+FROM spark-base AS pyspark
 
 # Install python deps
 COPY requirements/requirements.txt .
@@ -38,9 +38,9 @@ RUN pip3 install -r requirements.txt
 # Setup Spark related environment variables
 ENV PATH="/opt/spark/sbin:/opt/spark/bin:${PATH}"
 ENV SPARK_MASTER="spark://spark-master:7077"
-ENV SPARK_MASTER_HOST spark-master
-ENV SPARK_MASTER_PORT 7077
-ENV PYSPARK_PYTHON python3
+ENV SPARK_MASTER_HOST=spark-master
+ENV SPARK_MASTER_PORT=7077
+ENV PYSPARK_PYTHON=python3
 
 # Copy index.py
 COPY index.py .
@@ -58,6 +58,6 @@ ENV PYTHONPATH=$SPARK_HOME/python/:$PYTHONPATH
 
 # Copy appropriate entrypoint script
 COPY entrypoint.sh .
-
+RUN chmod +x ./entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]

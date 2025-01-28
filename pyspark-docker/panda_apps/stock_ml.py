@@ -12,20 +12,22 @@ spark = SparkSession.builder \
     .appName("Correlation Analysis") \
     .getOrCreate()
 
-csv_directory = "./tickers"
+csv_directory = ".book_data/tickers"
 
 csv_files = [file for file in os.listdir(csv_directory) if file.endswith('.csv')]
 
 dataframess = []
 
+# Read The CSV files in the directory
 for csv_file in csv_files:
     csv_path = os.path.join(csv_directory, csv_file)
     df_temp = spark.read.csv(csv_path, header=True, inferSchema=True)
     ticker = os.path.splitext(csv_file)[0]
     df_temp = df_temp.withColumn("Ticker", lit(ticker))
-    dfs.append(df_temp)
+    dataframess.append(df_temp)
 
-df = reduce(lambda x, y: x.union(y), dfs)
+# use recursion to join the data frames
+df = reduce(lambda x, y: x.union(y), dataframess)
 
 # Select numeric columns only
 numeric_columns = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']

@@ -6,17 +6,17 @@ This project objective is to document a development of a full data analysis plat
 
 ## Local development Apache Spark setup
 
-We are currently investigating Apache Spark as a possible analytics engine.
+To host this project locally in windows
+open/launch docker desktop engine
 
-To run the setup on local development run: 
+To run the setup on local development run the following in the Dockerfile directory: 
 
 ```
-docker compose up -d 
+docker compose up -d
 ``` 
 
 
 Access Master UI for more information:
-
 
 ```
 localhost:9090
