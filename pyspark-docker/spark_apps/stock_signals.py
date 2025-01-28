@@ -77,11 +77,11 @@ if __name__ == "__main__":
 
     # # Download Stock data
     # stock_data = yf.download(ticker, start=start_date, end=end_date)
-    # output_csv_file = "stock_data.csv"
+    # output_csv_file = "./book_data/stock_tickers/stock_data.csv"
 
     # stock_data.to_csv(output_csv_file)
     # # Save the data as a Parquet file
-    # output_parquet_file = "stock_data.parquet"
+    # output_parquet_file = "./book_data/stock_tickers/stock_data.parquet"
     # stock_data.to_parquet(output_parquet_file)
 
     # print(f"stock data saved to parquet {output_parquet_file}")
