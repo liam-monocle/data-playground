@@ -1,10 +1,66 @@
 import yfinance as yf
 import pandas as pd
 
+def display_ticker_data(ticker):
+    ticker_data = yf.Ticker(ticker)
+    data = ticker_data.funds_data
+
+    print(ticker_data.get_financials(freq="quarterly"))
+    # show fund description
+    try:
+     print(data.description)
+    except Exception as e:
+        print(e)
+    
+
+    # show operational information
+    try:
+     print(data.fund_overview)
+    except Exception as e:
+        print(e)
+
+    try:
+     print(data.fund_operations)
+    except Exception as e:
+        print(e)
+
+
+    # show holdings related information
+    try:
+     print(data.asset_classes)
+    except Exception as e:
+        print(e) 
+    
+    try:
+     print(data.top_holdings)
+    except Exception as e:
+        print(e)
+    
+    try:
+     print(data.equity_holdings)
+    except Exception as e:
+        print(e)
+
+    try:
+     print(data.bond_holdings)
+    except Exception as e:
+        print(e)
+    
+    try:
+     print(data.bond_ratings)
+    except Exception as e:
+        print(e)
+
+    try:
+     print(data.sector_weightings)
+    except Exception as e:
+        print(e)  
+    
+    
 # Function to fetch stock data
 def fetch_stock_data(ticker, start_date, end_date):
     print(f"Fetching data for {ticker}...")
-    return yf.download(ticker, start=start_date, end=end_date)
+    return yf.download(ticker,period="1d", start=start_date, end=end_date)
 
 # Function to calculate trading signals
 def generate_trading_signals(data, moving_avg_period=20):
@@ -23,12 +79,12 @@ def generate_trading_signals(data, moving_avg_period=20):
     data["Previous Low"] = data["Low"].shift(1)    # Shift lows forward by one day
 
     # print(data.index)
-    print("Close index")
-    print(data["Close"].index)
-    print("Previous High Index")
-    print(data["Previous High"].index)
-    print("Moving Average")
-    print(data["Moving Average"].index)
+    # print("Close index")
+    # print(data["Close"].index)
+    # print("Previous High Index")
+    # print(data["Previous High"].index)
+    # print("Moving Average")
+    # print(data["Moving Average"].index)
  
      # Align columns before comparisons
     data["Close_Aligned"], data["Previous_High_Aligned"] = data["Close"].align(data["Previous High"], axis=0, copy=False)
@@ -56,15 +112,15 @@ def display_alerts_with_dates(data):
             alerts.append({
                 'Date': index.date(),
                 'Event': 'Broke Above High',
-                'Previous Value': row['Previous High'].name,
-                'Close': row['Close'].name
+                'Previous Value': row['Previous High'],
+                'Close': row['Close']
             })
         if row["Below Low"].item() if isinstance(row["Below Low"], pd.Series) else row["Below Low"]:
             alerts.append({
                 'Date': index.date(),
                 'Event': 'Broke Below Low',
-                'Previous Value': row['Previous Low'].name,
-                'Close': row['Close'].name
+                'Previous Value': row['Previous Low'],
+                'Close': row['Close']
             })
     return alerts
 
@@ -72,8 +128,11 @@ def display_alerts_with_dates(data):
 if __name__ == "__main__":
 # Define the ticker symbol and the date range
     ticker = "TSLA"
+    ticker = "GOOG"
     start_date = "2024-01-01"  # 2 years ago from today
     end_date = "2025-01-01"    # Adjust the end date as needed
+
+    display_ticker_data(ticker)
 
     # # Download Stock data
     # stock_data = yf.download(ticker, start=start_date, end=end_date)
